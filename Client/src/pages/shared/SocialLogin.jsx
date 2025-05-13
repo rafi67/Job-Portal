@@ -1,29 +1,102 @@
-import React, { useContext } from 'react';
-import AuthContext from '../../context/AuthContext/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import AuthContext from "../../context/AuthContext/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SocialLogin = () => {
-    const { singInWithGoogle } = useContext(AuthContext);
-    const navigate = useNavigate();
+  const { singInWithGoogle } = useContext(AuthContext);
+  const [newUser, setNewUser] = useState();
+  const navigate = useNavigate();
 
-    const handleGoogleSignIn = () => {
-        singInWithGoogle()
-            .then(result => {
-                console.log(result.user);
-                navigate('/');
-            })
-            .catch(error => {
-                console.log(error.message)
-            })
-    }
+  const add = (e) => {
+    e.preventDefault();
+    console.log("add function called");
+    const form = e.target;
+    const accountType = form.accountType.value;
+    const email = newUser.email;
+    const name = newUser.displayName;
 
-    return (
-        <div className='m-4'>
-              <div className="divider">OR</div>
+    const user = {
+      name: name,
+      email: email,
+      accountType: accountType,
+    };
 
-            <button onClick={handleGoogleSignIn} className='btn'>Google</button>
+    fetch("http://localhost:5000/createUser", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("returned user data:", data);
+        navigate("/");
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    singInWithGoogle()
+      .then((result) => {
+        setNewUser(result.user);
+        fetch(`http://localhost:5000/user?email=${result.user.email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (result.user.email !== data[0].email) {
+              document.getElementById("my_modal_1").click();
+            }
+          });
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  return (
+    <div className="m-4">
+      <div className="divider">OR</div>
+      <button onClick={handleGoogleSignIn} className="btn">
+        Google
+      </button>
+      {/* Open the modal using document.getElementById('ID').showModal() method */}
+      <dialog
+        id="my_modal_1"
+        className="modal"
+        onClick={() => document.getElementById("my_modal_1").showModal()}
+      >
+        <div className="modal-box">
+          <p className="py-4">Please enter your account information</p>
+          <form onSubmit={add}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Account Type</span>
+              </label>
+              <select
+                className="select select-bordered w-full max-w-xs"
+                name="accountType"
+              >
+                <option disabled selected>
+                  Select Account Type
+                </option>
+                <option value="Job Seeker">Job Seeker</option>
+                <option value="Employer">Employer</option>
+              </select>
+            </div>
+            <div className="form-control my-5">
+              <button className="btn">Add</button>
+            </div>
+          </form>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
         </div>
-    );
+      </dialog>
+    </div>
+  );
 };
 
 export default SocialLogin;
