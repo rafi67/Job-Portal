@@ -18,7 +18,7 @@ const Home = () => {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-4 gap-10">
+                <div className="grid gird-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
                     <div className="border border-gray-500 p-7 rounded-xl">
                         <figure className="mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-16 text-blue-400">
