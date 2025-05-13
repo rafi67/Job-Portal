@@ -9,8 +9,8 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 app.use(cors());
 app.use(express.json());
 
-// const uri = `mongodb+srv://${process.env.NAME}:${process.env.SECURITY_KEY}@cluster0.swu9d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-const uri = `mongodb://localhost:27017/job_portal`;
+const uri = `mongodb+srv://${process.env.NAME}:${process.env.SECURITY_KEY}@cluster0.bk0nm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+// const uri = `mongodb://localhost:27017/job_portal`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
