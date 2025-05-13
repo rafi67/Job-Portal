@@ -30,6 +30,7 @@ async function run() {
 
         // jobs related apis
         const jobsCollection = client.db('jobPortal').collection('jobs');
+        const userCollection = client.db('users').collection('jobs');
         const jobApplicationCollection = client.db('jobPortal').collection('job_applications');
 
         // jobs related APIs
@@ -55,7 +56,7 @@ async function run() {
             const newJob = req.body;
             const result = await jobsCollection.insertOne(newJob);
             res.send(result);
-        })
+        });
 
 
         // job application apis
@@ -132,6 +133,13 @@ async function run() {
             const result = await jobApplicationCollection.updateOne(filter, updatedDoc);
             res.send(result)
         })
+
+        // users related api
+        app.post('/createUser', async (req, res) => {
+            const newUser = req.body;
+            const result = await userCollection.insertOne(newUser);
+            res.send(result);
+        });
 
 
     } finally {
