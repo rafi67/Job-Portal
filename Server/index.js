@@ -30,7 +30,7 @@ async function run() {
 
         // jobs related apis
         const jobsCollection = client.db('jobPortal').collection('jobs');
-        const userCollection = client.db('users').collection('jobs');
+        const userCollection = client.db('jobPortal').collection('users');
         const jobApplicationCollection = client.db('jobPortal').collection('job_applications');
 
         // jobs related APIs
@@ -38,7 +38,7 @@ async function run() {
             const email = req.query.email;
             let query = {};
             if (email) {
-                query = { hr_email: email }
+                query = { email: email };
             }
             const cursor = jobsCollection.find(query);
             const result = await cursor.toArray();
