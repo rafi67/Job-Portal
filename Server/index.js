@@ -135,6 +135,17 @@ async function run() {
         })
 
         // users related api
+        app.get('/user', async (req, res) => {
+            const email = req.query.email;
+            let query = {};
+            if (email) {
+                query = { email: email };
+            }
+            const user = userCollection.find(query);
+            const result = await user.toArray();
+            res.send(result);
+        });
+
         app.post('/createUser', async (req, res) => {
             const newUser = req.body;
             const result = await userCollection.insertOne(newUser);
