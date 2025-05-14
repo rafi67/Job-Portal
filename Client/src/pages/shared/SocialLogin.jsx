@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -31,7 +31,6 @@ const SocialLogin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        toast.success('Successfully done');
         navigate("/");
       });
   };
@@ -47,6 +46,7 @@ const SocialLogin = () => {
             if (data[0]==null) {
               modal.showModal();
             }
+            navigate('/');
           });
       })
       .catch((error) => {
