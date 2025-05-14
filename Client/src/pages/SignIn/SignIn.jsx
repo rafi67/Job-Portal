@@ -1,18 +1,13 @@
 import Lottie from 'lottie-react';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import loginLottieJSON from '../../assets/lottie/login.json'
 import AuthContext from '../../context/AuthContext/AuthContext';
 import SocialLogin from '../shared/SocialLogin';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
     const { singInUser, user } = useContext(AuthContext);
-    const location = useLocation();
     const navigate = useNavigate();
-    console.log('in signIn page', location)
-    const from =  '/';
-
-    if(user) return <Navigate to={from} from='/signIn'></Navigate>
 
     const handleSignIn = e => {
         e.preventDefault();

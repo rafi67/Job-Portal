@@ -31,20 +31,21 @@ const SocialLogin = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("returned user data:", data);
+        toast.success('Successfully done');
         navigate("/");
       });
   };
 
   const handleGoogleSignIn = () => {
+    const modal = document.getElementById('my_modal_1');
     singInWithGoogle()
       .then((result) => {
         setNewUser(result.user);
         fetch(`http://localhost:5000/user?email=${result.user.email}`)
           .then((res) => res.json())
           .then((data) => {
-            if (result.user.email !== data[0].email) {
-              document.getElementById("my_modal_1").click();
+            if (data[0]==null) {
+              modal.showModal();
             }
           });
       })
@@ -63,7 +64,6 @@ const SocialLogin = () => {
       <dialog
         id="my_modal_1"
         className="modal"
-        onClick={() => document.getElementById("my_modal_1").showModal()}
       >
         <div className="modal-box">
           <p className="py-4">Please enter your account information</p>

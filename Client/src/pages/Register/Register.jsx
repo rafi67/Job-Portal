@@ -1,51 +1,52 @@
 import Lottie from "lottie-react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import registerLottieData from "../../assets/lottie/register.json";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import SocialLogin from "../shared/SocialLogin";
 import { toast } from "react-toastify";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { createUser, user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const from = '/';
-
-  if(user) return <Navigate to={from} from={location.pathname}></Navigate>
 
   const handleRegister = (e) => {
     e.preventDefault();
-    
+
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     const confirmedPassword = form.confirmedPassword.value;
     const accountType = form.accountType.value;
-    console.log('submit user data',email, password);
+    console.log("submit user data", email, password);
 
-    if(password!==confirmedPassword) {
-        toast.warning('Password mismatch');
-        return;
+    if (password !== confirmedPassword) {
+      toast.warning("Password mismatch");
+      return;
     }
 
     const newUser = {
-        name: name,
-        email: email,
-        accountType: accountType,
+      name: name,
+      email: email,
+      accountType: accountType,
     };
 
-    fetch("http://localhost:5000/createUser", {
-      method: "Post",
-      headers: {
-        'content-type' : 'application/json',
-      },
-      body: JSON.stringify(newUser),
-    })
-    .then(res => res.json())
-    .then(data => console.log(data));
+    fetch(`http://localhost:5000/user?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (email !== data[0].email) {
+          fetch("http://localhost:5000/createUser", {
+            method: "Post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+        }
+      });
 
     // password validation:
     // show password validation error
@@ -56,7 +57,8 @@ const Register = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error.message);
+        toast.error(error.message);
+        form.reset();
       });
   };
 
@@ -121,7 +123,10 @@ const Register = () => {
               <label className="label">
                 <span className="label-text">Account Type</span>
               </label>
-              <select className="select select-bordered w-full max-w-xs" name="accountType">
+              <select
+                className="select select-bordered w-full max-w-xs"
+                name="accountType"
+              >
                 <option disabled selected>
                   Select Account Type
                 </option>
