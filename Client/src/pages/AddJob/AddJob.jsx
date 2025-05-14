@@ -1,14 +1,17 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const AddJob = () => {
 
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const handleAddJob = e => {
         e.preventDefault();
         const formData = new FormData(e.target);
+        // const formdata = e.target;
         // console.log(formData.entries())
         const initialData = Object.fromEntries(formData.entries());
         // console.log(initialData)
@@ -36,8 +39,7 @@ const AddJob = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    formData.reset();
-                    navigate('/myPostedJobs')
+                    navigate('/myPostedJobs');
                 }
             })
     }
