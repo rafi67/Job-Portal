@@ -38,7 +38,7 @@ async function run() {
             const email = req.query.email;
             let query = {};
             if (email) {
-                query = { email: email };
+                query = { hr_email: email };
             }
             const cursor = jobsCollection.find(query);
             const result = await cursor.toArray();
